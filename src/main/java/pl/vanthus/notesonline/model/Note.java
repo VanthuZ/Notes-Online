@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -18,6 +19,7 @@ public class Note {
     private String title;
     private String content;
     private boolean isImportant;
+    private LocalDateTime createDate = LocalDateTime.now();
     @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
