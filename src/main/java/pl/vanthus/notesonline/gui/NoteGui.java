@@ -29,6 +29,7 @@ public class NoteGui extends VerticalLayout {
 
 
         initNoteLayout();
+        initGridView();
 
 
     }
@@ -59,6 +60,21 @@ public class NoteGui extends VerticalLayout {
 
         setHorizontalComponentAlignment(Alignment.CENTER, noteLayout);
         add(noteLayout);
+
+    }
+
+    private void initGridView(){
+
+
+        Grid<Note> gridNote = new Grid<>(Note.class);
+        gridNote.setItems(noteService.getAllUserNotes(1L));
+
+        gridNote.removeColumnByKey("id");
+        gridNote.removeColumnByKey("user");
+
+        gridNote.setColumns("title", "content", "important", "createDate");
+
+        add(gridNote);
 
     }
 }
