@@ -16,9 +16,23 @@ public class Note {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
+    private String content;
+    private boolean isImportant;
     @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
 
+    public Note(String title, String content, boolean isImportant) {
+        this.title = title;
+        this.content = content;
+        this.isImportant = isImportant;
+    }
+
+    public Note(String title, String content, boolean isImportant, User user) {
+        this.title = title;
+        this.content = content;
+        this.isImportant = isImportant;
+        this.user = user;
+    }
 }
