@@ -37,6 +37,7 @@ public class NoteGui extends VerticalLayout {
 
 
         initNoteLayout();
+        initButtonLayout();
         initGridView();
 
 
@@ -52,6 +53,23 @@ public class NoteGui extends VerticalLayout {
         titleField = new TextField("Title");
         isImportantCheckBox = new Checkbox("Important");
         contentArea = new TextArea("Content");
+        contentArea.setHeight("200px");
+
+
+        noteLayout.setResponsiveSteps(
+                new FormLayout.ResponsiveStep("25em", 1));
+
+        noteLayout.add(titleField, contentArea, isImportantCheckBox);
+
+
+        add(noteLayout);
+
+    }
+
+    private void initButtonLayout() {
+
+        FormLayout buttonLayout = new FormLayout();
+
         saveButton  = new Button("Save Note");
 
         saveButton.addClickListener(event -> {
@@ -84,17 +102,9 @@ public class NoteGui extends VerticalLayout {
             UI.getCurrent().getPage().reload();
         });
 
-
-        noteLayout.setResponsiveSteps(
-                new FormLayout.ResponsiveStep("25em", 1));
-
-        noteLayout.add(titleField, contentArea, isImportantCheckBox, saveButton, removeButton);
-
-        setHorizontalComponentAlignment(Alignment.CENTER, noteLayout);
-        add(noteLayout);
-
+        buttonLayout.add(saveButton, removeButton);
+        add(buttonLayout);
     }
-
 
 
     private void initGridView(){
