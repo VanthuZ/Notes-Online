@@ -3,13 +3,16 @@ package pl.vanthus.notesonline.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.vanthus.notesonline.model.Note;
 import pl.vanthus.notesonline.model.User;
 import pl.vanthus.notesonline.repository.NoteRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Transactional
 public class NoteService{
 
     NoteRepository noteRepository;
@@ -26,5 +29,18 @@ public class NoteService{
 
     public List<Note> getAllUserNotes(Long userId){
         return noteRepository.findAllByUserId(userId);
+    }
+
+    public void updateNote(Long noteId, String newTitle, String newContent, boolean isImportant){
+
+        Note noteToUpdate = noteRepository.getOne(noteId);
+
+        noteToUpdate.setTitle(newTitle);
+        noteToUpdate.setContent(newContent);
+        noteToUpdate.setImportant(isImportant);
+        noteToUpdate.setModifiedDate(LocalDateTime.now());
+
+        noteRepository.save(noteToUpdate);
+
     }
 }

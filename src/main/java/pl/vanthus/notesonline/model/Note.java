@@ -20,6 +20,7 @@ public class Note {
     private String content;
     private boolean isImportant;
     private LocalDateTime createDate = LocalDateTime.now();
+    private LocalDateTime modifiedDate;
     @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;

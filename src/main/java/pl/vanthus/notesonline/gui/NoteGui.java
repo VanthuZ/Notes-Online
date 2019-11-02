@@ -1,5 +1,6 @@
 package pl.vanthus.notesonline.gui;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -20,6 +21,11 @@ public class NoteGui extends VerticalLayout {
 
     private NoteService noteService;
     private UserService userService;
+    private TextField titleField;
+    private Checkbox isImportantCheckBox;
+    private TextArea contentArea;
+    private Button saveButton;
+    private TextField noteId;
 
     @Autowired
     public NoteGui(NoteService noteService, UserService userService) {
@@ -39,18 +45,36 @@ public class NoteGui extends VerticalLayout {
 
         FormLayout noteLayout = new FormLayout();
 
+        noteId = new TextField();
+        noteId.setVisible(false);
+        titleField = new TextField("Title");
+        isImportantCheckBox = new Checkbox("Important");
+        contentArea = new TextArea("Content");
+        saveButton  = new Button("Save Note");
 
-        TextField titleField = new TextField("Title");
-        Checkbox isImportantCheckBox = new Checkbox("Important");
-        TextArea contentArea = new TextArea("Content");
-        Button saveButton  = new Button("Save Note");
+        saveButton.addClickListener(event -> {
 
-        saveButton.addClickListener(event -> noteService.saveNote(new Note(
-                titleField.getValue(),
-                contentArea.getValue(),
-                isImportantCheckBox.getValue(),
-                userService.getUserById(1L)
-        )));
+            if(noteId.isEmpty()){
+
+                noteService.saveNote(new Note(
+                        titleField.getValue(),
+                        contentArea.getValue(),
+                        isImportantCheckBox.getValue(),
+                        userService.getUserById(1L)
+                ));
+
+            }else{
+
+                noteService.updateNote(
+                        Long.parseLong(noteId.getValue()),
+                        titleField.getValue(),
+                        contentArea.getValue(),
+                        isImportantCheckBox.getValue());
+            }
+
+            UI.getCurrent().getPage().reload();
+
+        });
 
 
         noteLayout.setResponsiveSteps(
@@ -63,6 +87,8 @@ public class NoteGui extends VerticalLayout {
 
     }
 
+
+
     private void initGridView(){
 
 
@@ -72,9 +98,18 @@ public class NoteGui extends VerticalLayout {
         gridNote.removeColumnByKey("id");
         gridNote.removeColumnByKey("user");
 
-        gridNote.setColumns("title", "content", "important", "createDate");
+        gridNote.setColumns("title", "content", "important", "createDate", "modifiedDate");
 
         add(gridNote);
 
+        gridNote.addItemDoubleClickListener(event -> {
+            titleField.setValue(event.getItem().getTitle());
+            contentArea.setValue(event.getItem().getContent());
+            isImportantCheckBox.setValue(event.getItem().isImportant());
+            noteId.setValue(event.getItem().getId().toString());
+        });
+
     }
+
+
 }
