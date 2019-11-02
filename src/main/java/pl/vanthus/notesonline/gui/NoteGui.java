@@ -8,10 +8,10 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.vanthus.notesonline.model.Note;
-import pl.vanthus.notesonline.model.User;
 import pl.vanthus.notesonline.service.NoteService;
 import pl.vanthus.notesonline.service.UserService;
 
@@ -21,11 +21,13 @@ public class NoteGui extends VerticalLayout {
 
     private NoteService noteService;
     private UserService userService;
+
     private TextField titleField;
     private Checkbox isImportantCheckBox;
     private TextArea contentArea;
     private Button saveButton;
     private TextField noteId;
+    private Button removeButton;
 
     @Autowired
     public NoteGui(NoteService noteService, UserService userService) {
@@ -76,11 +78,17 @@ public class NoteGui extends VerticalLayout {
 
         });
 
+        removeButton = new Button("Remove Note");
+        removeButton.addClickListener(event -> {
+            noteService.deleteNote(Long.parseLong(noteId.getValue()));
+            UI.getCurrent().getPage().reload();
+        });
+
 
         noteLayout.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("25em", 1));
 
-        noteLayout.add(titleField, contentArea, isImportantCheckBox, saveButton);
+        noteLayout.add(titleField, contentArea, isImportantCheckBox, saveButton, removeButton);
 
         setHorizontalComponentAlignment(Alignment.CENTER, noteLayout);
         add(noteLayout);
