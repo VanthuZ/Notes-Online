@@ -18,10 +18,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
       http
               .authorizeRequests()
-              .antMatchers("/notes").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+           //   .antMatchers("/notes").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
               .anyRequest().permitAll()
      .and()
-              .formLogin().and().httpBasic()
+              .formLogin().defaultSuccessUrl("/notes").and().httpBasic()
      .and()
               .csrf().disable();
 

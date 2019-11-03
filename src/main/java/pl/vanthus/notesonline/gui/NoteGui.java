@@ -5,6 +5,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -38,10 +40,11 @@ public class NoteGui extends VerticalLayout {
         this.userService = userService;
 
 
-
+        initLoginUserForm();
         initNoteLayout();
         initButtonLayout();
         initGridView();
+
 
 
     }
@@ -129,6 +132,44 @@ public class NoteGui extends VerticalLayout {
             isImportantCheckBox.setValue(event.getItem().isImportant());
             noteId.setValue(event.getItem().getId().toString());
         });
+
+    }
+
+    private void initLoginUserForm(){
+
+        FormLayout anchorLayout = new FormLayout();
+
+        Label loggedUserLabel = new Label();
+        loggedUserLabel.setText(userService.getCurrentUserName());
+        loggedUserLabel.getStyle().set("margin-left", "80%");
+
+        Anchor  signIn = new Anchor("/login","Sign in");
+        Anchor  logout = new Anchor ("/logout","Logout");
+        Anchor  signUp = new Anchor ("/register","Sign up");
+
+        anchorLayout.add(signIn, logout, signUp);
+
+        anchorLayout.setResponsiveSteps(
+                new FormLayout.ResponsiveStep("10em", 1),
+                new FormLayout.ResponsiveStep("10em", 2),
+                new FormLayout.ResponsiveStep("10em", 3));
+
+
+        anchorLayout.getStyle().set("margin-left", "80%");
+
+
+        if(userService.getCurrentUserName().equals("anonymousUser")){
+            signIn.setVisible(true);
+            signUp.setVisible(true);
+            logout.setVisible(false);
+        }else{
+            signIn.setVisible(false);
+            signUp.setVisible(false);
+            logout.setVisible(true);
+        }
+
+
+        add(loggedUserLabel, anchorLayout);
 
     }
 

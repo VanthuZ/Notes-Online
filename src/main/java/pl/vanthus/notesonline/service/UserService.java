@@ -1,6 +1,8 @@
 package pl.vanthus.notesonline.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import pl.vanthus.notesonline.model.User;
 import pl.vanthus.notesonline.repository.UserRepository;
@@ -17,5 +19,10 @@ public class UserService {
 
     public User getUserById(Long id){
         return  userRepository.getOne(id);
+    }
+
+    public String getCurrentUserName(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
     }
 }
