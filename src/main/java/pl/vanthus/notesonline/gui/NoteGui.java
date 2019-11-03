@@ -11,7 +11,10 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import pl.vanthus.notesonline.model.Note;
+import pl.vanthus.notesonline.model.User;
 import pl.vanthus.notesonline.service.NoteService;
 import pl.vanthus.notesonline.service.UserService;
 
