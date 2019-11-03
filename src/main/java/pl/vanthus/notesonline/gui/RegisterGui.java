@@ -1,10 +1,13 @@
 package pl.vanthus.notesonline.gui;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
+import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.data.binder.Binder;
@@ -52,9 +55,13 @@ public class RegisterGui extends VerticalLayout {
 
                try{
                    userService.registerUser(new User(emailField.getValue(), passwordField.getValue()));
+                   dialog.removeAll();
                    dialog.add(new Label("The user has been created"));
                    dialog.open();
+                   UI.getCurrent().navigate("notes");
+
                }catch (HibernateException exception){
+                   dialog.removeAll();
                    dialog.add(new Label("Something went wrong :("));
                    dialog.open();
                }
