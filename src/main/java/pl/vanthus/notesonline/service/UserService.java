@@ -11,6 +11,8 @@ import pl.vanthus.notesonline.model.User;
 import pl.vanthus.notesonline.repository.RoleRepository;
 import pl.vanthus.notesonline.repository.UserRepository;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 public class UserService {
@@ -45,6 +47,16 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    public Long setCurrentLoggedUserId(){
+        Optional<User> currentUser = Optional.ofNullable(userRepository.findUserByEmail(getCurrentUserName()));
+
+        if (currentUser.isPresent()){
+            return currentUser.get().getId();
+        }else{
+            return 1L;
+        }
     }
 
 }

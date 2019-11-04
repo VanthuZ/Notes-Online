@@ -7,4 +7,6 @@ import pl.vanthus.notesonline.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
+    User findUserByEmail(String email);
 }
