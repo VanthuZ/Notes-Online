@@ -6,14 +6,15 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-
-import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
+
 import org.hibernate.HibernateException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import pl.vanthus.notesonline.model.User;
 import pl.vanthus.notesonline.service.UserService;
 
@@ -22,7 +23,6 @@ public class RegisterGui extends VerticalLayout {
 
 
     private UserService userService;
-    private Binder<User> binder = new Binder<>(User.class);
 
     @Autowired
     public RegisterGui(UserService userService) {
@@ -46,27 +46,26 @@ public class RegisterGui extends VerticalLayout {
         Dialog dialog = new Dialog();
 
 
-
         registerButton.addClickListener(event -> {
 
             //todo add validation for fields
 
-            if(!emailField.getValue().equals("") & userService.passwordCheck(passwordField.getValue(), passwordConfirmField.getValue())){
+            if (!emailField.getValue().equals("") & userService.passwordCheck(passwordField.getValue(), passwordConfirmField.getValue())) {
 
-               try{
-                   userService.registerUser(new User(emailField.getValue(), passwordField.getValue()));
-                   dialog.removeAll();
-                   dialog.add(new Label("The user has been created"));
-                   dialog.open();
-                   UI.getCurrent().navigate("notes");
+                try {
+                    userService.registerUser(new User(emailField.getValue(), passwordField.getValue()));
+                    dialog.removeAll();
+                    dialog.add(new Label("The user has been created"));
+                    dialog.open();
+                    UI.getCurrent().navigate("notes");
 
-               }catch (HibernateException exception){
-                   dialog.removeAll();
-                   dialog.add(new Label("Something went wrong :("));
-                   dialog.open();
-               }
+                } catch (HibernateException exception) {
+                    dialog.removeAll();
+                    dialog.add(new Label("Something went wrong :("));
+                    dialog.open();
+                }
 
-            }else{
+            } else {
                 dialog.removeAll();
                 dialog.add(new Label("Check your email and passwords and try again"));
                 dialog.open();

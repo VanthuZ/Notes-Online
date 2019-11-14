@@ -28,6 +28,7 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
     @ManyToMany(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
     @JoinTable(
@@ -36,8 +37,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    public void addRole(Role role){
+    public void addRole(Role role) {
         this.roles.add(role);
     }
-
 }

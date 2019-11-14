@@ -10,17 +10,13 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.provider.ListDataProvider;
+
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import pl.vanthus.notesonline.model.Note;
-import pl.vanthus.notesonline.model.User;
 import pl.vanthus.notesonline.service.NoteService;
 import pl.vanthus.notesonline.service.UserService;
-
-import java.util.Optional;
 
 
 @Route("notes")
@@ -37,7 +33,6 @@ public class NoteGui extends VerticalLayout {
     private Button removeButton;
 
 
-
     @Autowired
     public NoteGui(NoteService noteService, UserService userService) {
         this.noteService = noteService;
@@ -51,7 +46,7 @@ public class NoteGui extends VerticalLayout {
     }
 
 
-    private void initNoteLayout(){
+    private void initNoteLayout() {
 
         FormLayout noteLayout = new FormLayout();
 
@@ -73,10 +68,10 @@ public class NoteGui extends VerticalLayout {
     private void initButtonLayout() {
 
         FormLayout buttonLayout = new FormLayout();
-        saveButton  = new Button("Save Note");
+        saveButton = new Button("Save Note");
         saveButton.addClickListener(event -> {
 
-            if(noteId.isEmpty()){
+            if (noteId.isEmpty()) {
 
                 noteService.saveNote(new Note(
                         titleField.getValue(),
@@ -85,7 +80,7 @@ public class NoteGui extends VerticalLayout {
                         userService.getUserById(userService.setCurrentLoggedUserId())
                 ));
 
-            }else{
+            } else {
 
                 noteService.updateNote(
                         Long.parseLong(noteId.getValue()),
@@ -109,10 +104,10 @@ public class NoteGui extends VerticalLayout {
     }
 
 
-    private void initGridView(){
+    private void initGridView() {
 
         Grid<Note> gridNote = new Grid<>(Note.class);
-        gridNote.setItems(noteService.getAllUserNotes(userService.setCurrentLoggedUserId()));
+        gridNote.setItems(noteService.getAllNotesByUser(userService.setCurrentLoggedUserId()));
 
         gridNote.removeColumnByKey("id");
         gridNote.removeColumnByKey("user");
@@ -129,7 +124,7 @@ public class NoteGui extends VerticalLayout {
         });
     }
 
-    private void initLoginUserForm(){
+    private void initLoginUserForm() {
 
         FormLayout anchorLayout = new FormLayout();
 
@@ -137,9 +132,9 @@ public class NoteGui extends VerticalLayout {
         loggedUserLabel.setText(userService.getCurrentUserName());
         loggedUserLabel.getStyle().set("margin-left", "80%");
 
-        Anchor  signIn = new Anchor("/login","Sign in");
-        Anchor  logout = new Anchor ("/logout","Logout");
-        Anchor  signUp = new Anchor ("/register","Sign up");
+        Anchor signIn = new Anchor("/login", "Sign in");
+        Anchor logout = new Anchor("/logout", "Logout");
+        Anchor signUp = new Anchor("/register", "Sign up");
 
         anchorLayout.add(signIn, logout, signUp);
 
@@ -150,11 +145,11 @@ public class NoteGui extends VerticalLayout {
 
         anchorLayout.getStyle().set("margin-left", "80%");
 
-        if(userService.getCurrentUserName().equals("anonymousUser")){
+        if (userService.getCurrentUserName().equals("anonymousUser")) {
             signIn.setVisible(true);
             signUp.setVisible(true);
             logout.setVisible(false);
-        }else{
+        } else {
             signIn.setVisible(false);
             signUp.setVisible(false);
             logout.setVisible(true);
